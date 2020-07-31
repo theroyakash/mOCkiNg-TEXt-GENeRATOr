@@ -1,0 +1,141 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+        <title>Mocking Spongebob Squarepants Text Generator</title>
+        <style type="text/css">
+textarea {
+    display:block;
+    width:400px;
+    height:10em;
+    margin:1em;
+    font: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", Arial, sans-serif;
+}
+
+#clipboard-success {
+    display:none;
+    font-weight:strong
+}
+#dl-btn {
+    display:block;
+    margin:1em 0px
+}
+#rows {
+    display:flex;
+    flex-direction:row;
+    flex-wrap:wrap
+}
+#rows > * {
+    margin-right:20px
+}
+        </style>
+
+        <link href="https://fonts.googleapis.com/css?family=Anton&amp;subset=latin-ext"
+              rel="stylesheet">
+
+    </head>
+    <body>
+        <h1>MoCking TexT gENeraTOR</h1>
+        <small>by <a
+                href="https://www.twitter.com/theroyakash">@theroyakash</a></small>
+
+        <div id="rows">
+            <div>
+                <h3>Gimme your input here</h3>
+                <textarea id="in"></textarea>
+
+                <h3>Tap to copy</h3>
+                <p id="clipboard-success">Copied, now share wherever you want</p>
+                <textarea id="out" readonly="true"></textarea>
+            </div>
+            <div>
+                <h3>Download</h3>
+                <a href="#" download="stoP-THAt-RiGHT-nOW.jpg" id="dl-btn">
+                    Tap to download the image
+                </a>
+                <canvas id="canvas"></canvas>
+            </div>
+        </div>
+
+        <script language="javascript">
+var input = document.getElementById("in");
+var output = document.getElementById("out");
+var img = new Image();
+var width = 583;
+var height = 411;
+var center = width / 2;
+var lineWidth = 2.5;
+var fontSize = 42;
+
+function tweak (c) {
+    return Math.random() < 0.5 ? c.toLowerCase() : c.toUpperCase();
+}
+
+function mock (text) {
+    ctx.drawImage(img, 0, 0);
+    ctx.font = fontSize + "px Anton";
+    ctx.lineWidth = lineWidth;
+
+    text = output.value = text.split("").map(tweak).join("");
+
+    var m = text.match(/([^\n]+(?:\n[^\n]+)*)?(\n(?:\n[^\n]+)*)?/);
+    var top = m[1] ? m[1] : "";
+    var bottom = m[2] ? m[2] : "";
+
+    top.split("\n").map(function (line, lineno) {
+        // top margin + number of lines * char height incl. padding
+        var yoffset = 5 + ((1 + lineno) * (fontSize * 1.1));
+        ctx.fillText(line, center, yoffset, width - 10);
+        ctx.strokeText(line, center, yoffset, width - 10);
+    });
+    bottom.split("\n").reverse().map(function (line, lineno) {
+        var yoffset = height - 10 - (lineno * (fontSize * 1.1));
+        ctx.fillText(line, center, yoffset, width - 10);
+        ctx.strokeText(line, center, yoffset, width - 10);
+    });
+}
+
+document.getElementById("dl-btn").addEventListener("click", function (e) {
+    e.target.href = canvas.toDataURL("image/jpg");
+});
+
+var canvas = document.getElementById("canvas");
+canvas.setAttribute("height", height);
+canvas.setAttribute("width", width);
+var ctx = canvas.getContext('2d');
+ctx.fillStyle = "#FFF";
+ctx.strokeStyle = "#000";
+ctx.textAlign = "center";
+img.src = "meme.jpg";
+img.addEventListener("load", function (e) {
+    mock("");
+});
+
+function clipboard () {
+    output.select(); 
+    try {
+        if (document.execCommand('copy')) {
+            document.getElementById("clipboard-success").style.display = "block";
+            setTimeout(function () {
+                document.getElementById("clipboard-success").style.display = "none";
+            }, 3000)
+            return true;
+        }
+    } catch (e) {}
+}
+
+input.addEventListener('keyup', function (e) { mock(e.target.value); });
+output.addEventListener('click', clipboard);
+        </script>
+        <script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-174216574-1', 'auto');
+ga('send', 'pageview');
+        </script>
+    </body>
+</html>
